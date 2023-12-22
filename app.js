@@ -2,23 +2,55 @@
 const dataTable = document.getElementById("data-table");
 const nextBtn = document.getElementById("nextButton");
 const previousBtn = document.getElementById("prevButton");
+const areaTableHead = document.getElementById("area-table-head");
+const stateSelect = document.getElementById("state-select");
+const currentPageNumberH2 = document.getElementById("current-page-number");
 
 let baseURL = "http://localhost:3000/api/data";
 
 let datas = [];
-let itemsPerPage = 10;
+let stateArray = [];
+let itemsPerPage = 15;
 let currentPage = 1;
+let page = 1;
+
+document.getElementById("current-page-number").innerText = currentPage;
 
 nextBtn.addEventListener("click", goToNextPage, false);
 previousBtn.addEventListener("click", goToPreviousPage, false);
+stateSelect.addEventListener("change", changeStates);
 
-async function renderTabel(page = 1) {
+async function changeStates() {
+  if (stateSelect.value === "Select a State") {
+    await getData();
+    console.log("datas in if: ", datas);
+    generateTableData(datas);
+    return;
+  }
+  await getData();
+  console.log("selected value: ", stateSelect.value);
+  console.log("datas before filter: ", datas);
+  datas = datas.filter((item) => item.State === stateSelect.value);
+  console.log("datas after filter: ", datas);
+  generateTableData(datas);
+
+  disablePreviousButton(page);
+  disableNextButton(page);
+}
+
+async function renderTable() {
   //invoke the fetch function here so it fetches only when we render the table
   await getData();
 
-  //create table entries for each data
-  let data = "";
+  console.log("Have Access to the huge data object here!!");
 
+  console.log("data in render table function: ");
+
+  generateTableData(datas);
+}
+
+function generateTableData(datas) {
+  let data = "";
   datas
     .filter((eachRow, index) => {
       //calculate which is the first page and last page
@@ -30,6 +62,7 @@ async function renderTabel(page = 1) {
     .forEach((eachData) => {
       //create the td HTML element to append to the table body
       data += "<tr>";
+      data += `<td>${eachData.State}</td>`; //Delete this later. Not in requirements
       data += `<td>${eachData.Year}</td>`;
       data += `<td>${eachData.Crop}</td>`;
       data += `<td>${eachData.District}</td>`;
@@ -39,32 +72,33 @@ async function renderTabel(page = 1) {
       ("<tr>");
     });
   dataTable.innerHTML = data;
-
-  disablePreviousButton(page);
-  disableNextButton(page);
 }
 
-renderTabel(currentPage);
+renderTable(currentPage);
 
 //Fetching data from the RestAPI
 async function getData() {
   const response = await fetch(baseURL);
   const dataJSON = await response.json();
   datas = dataJSON;
-  // fetch(baseURL)
-  //   .then((response) => response.json())
-  //   .then((dataJSON) => {
-  //     datas = dataJSON;
-  //     console.log("dataaa", datas);
-  //     // You can continue your logic here after the data is fetche
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error fetching data:", error);
-  //     // Handle the error as needed
-  //   });
+  createOptionElements(datas);
 }
 
 //Helper Functions
+function createOptionElements(datas) {
+  datas.forEach((data) => {
+    if (!stateArray.includes(data.State)) {
+      stateArray.push(data.State);
+      // console.log("here");
+      let newOption = document.createElement("option");
+      newOption.text = data.State;
+      newOption.value = data.State;
+      // console.log(newOption);
+      stateSelect.append(newOption);
+    }
+  });
+}
+
 function disableNextButton(page) {
   if (page == getNumberOfPage()) {
     nextBtn.disabled = true;
@@ -85,7 +119,11 @@ function goToNextPage() {
   console.log("clicked next");
   if (currentPage * itemsPerPage < datas.length) {
     currentPage++;
-    renderTabel(currentPage);
+    page++;
+    console.log("currentPage", currentPage);
+    document.getElementById("current-page-number").innerText = currentPage;
+    // renderTable(currentPage);
+    changeStates();
   }
 }
 
@@ -93,7 +131,10 @@ function goToPreviousPage() {
   console.log("clicked prev");
   if (currentPage > 1) {
     currentPage--;
-    renderTabel(currentPage);
+    page--;
+    document.getElementById("current-page-number").innerText = currentPage;
+    // renderTable(currentPage);
+    changeStates();
   }
 }
 
