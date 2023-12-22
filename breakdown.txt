@@ -1,8 +1,6 @@
-FrontEnd:
-
 BackEnd Rest API:
-    Boiler plate Node with express
-    Test: Listen to "Hello" on localhost
+    Boiler plate Node with express ✅
+    Test: Listen to "Hello" on localhost ✅
     API Function to parse csv file to JSON
     Test: test some sample JSON print to console that is being parsed from the csv file
     Display sample JSON in a table in FrontEnd
@@ -10,3 +8,13 @@ BackEnd Rest API:
         DATA TOO BIG
         Paginate API Fetch results
         Use in memory DB to load and process data
+
+FrontEnd:
+    Display all csv data in a table
+    Make the table sortable based on the given fields
+    Implement FrontEnd Pagination
+    Implement drop down to select a state
+    npm install chart.js or use CDN
+    Implement bar chart 1 depicting the production in tonnes per year
+    Implement bar chart 2 depicting the production in tonnes per crop
+    Implement selecting a portion of chart should filter the data in table automatically.
