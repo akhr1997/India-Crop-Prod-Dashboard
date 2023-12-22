@@ -30,12 +30,12 @@ async function renderTabel(page = 1) {
     .forEach((eachData) => {
       //create the td HTML element to append to the table body
       data += "<tr>";
-      data += `<td>${eachData.State}</td>`;
-      data += `<td>${eachData.Crop}</td>`;
-      data += `<td>${eachData.Production}</td>`;
-      data += `<td>${eachData.Season}</td>`;
-      data += `<td>${eachData.Yield}</td>`;
       data += `<td>${eachData.Year}</td>`;
+      data += `<td>${eachData.Crop}</td>`;
+      data += `<td>${eachData.District}</td>`;
+      data += `<td>${eachData.Area}</td>`;
+      data += `<td>${eachData.Production}</td>`;
+      data += `<td>${eachData.Yield}</td>`;
       ("<tr>");
     });
   dataTable.innerHTML = data;
