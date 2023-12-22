@@ -24,6 +24,8 @@ FrontEnd:
 
 CSS:
     Bootstrap for tables
+    Table headings
+    Button styles
 
 
 Extras:

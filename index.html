@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>CSV Data Table</title>
+  </head>
+  <body>
+    <h1>CSV Data Table</h1>
+
+    <table id="data-table">
+      <thead>
+        <tr>
+          <th>Column 1</th>
+          <th>Column 2</th>
+          <!-- Add more columns based on your CSV file -->
+        </tr>
+      </thead>
+      <tbody id="data-table">
+        <!-- Data will be dynamically added here -->
+      </tbody>
+    </table>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item">
+          <button class="page-link" id="prevButton">Prev</button>
+        </li>
+        <li class="page-item">
+          <button class="page-link" id="nextButton">Next</button>
+        </li>
+      </ul>
+    </nav>
+    <script src="app.js"></script>
+  </body>
+</html>
