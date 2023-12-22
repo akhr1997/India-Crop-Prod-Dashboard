@@ -1,0 +1,12 @@
+FrontEnd:
+
+BackEnd Rest API:
+    Boiler plate Node with express
+    Test: Listen to "Hello" on localhost
+    API Function to parse csv file to JSON
+    Test: test some sample JSON print to console that is being parsed from the csv file
+    Display sample JSON in a table in FrontEnd
+    Fetch all data from " India Agriculture Crop Production data. csv"
+        DATA TOO BIG
+        Paginate API Fetch results
+        Use in memory DB to load and process data
