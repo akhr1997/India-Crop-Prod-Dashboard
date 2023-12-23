@@ -8,6 +8,7 @@ const areaTabelHead = document.getElementById("area-table-head");
 const stateSelect = document.getElementById("state-select");
 const currentPageNumberH2 = document.getElementById("current-page-number");
 const dataHeaders = document.querySelectorAll(".table-head");
+const table = document.getElementById("csv-table");
 
 //Arrays Calculate average Production for each Crop for Graphing!
 const Crops = [];
@@ -38,7 +39,7 @@ dataHeaders.forEach((head) => {
 
 async function changeStates() {
   if (stateSelect.value === "Select a State") {
-    await getData();
+    // await getData();
     console.log("datas object on changing states using dropdown: ", datas);
 
     generateTableData(datas);
@@ -97,13 +98,24 @@ function generateTableData(datas) {
 }
 
 function headClicked(event) {
+  let filterKey = event.target.innerText;
+
+  if (table.classList.contains("sorted-by-descending")) {
+    sortedData = datas.sort((a, b) => a[filterKey].localeCompare(b[filterKey]));
+    console.log("sortedData:", sortedData);
+    generateTableData(sortedData);
+    table.classList.remove("sorted-by-descending");
+    return;
+    //    a.name.localeCompare(b.name));
+  }
   console.log("clicked: ", event.target.innerText);
   console.log("unsortedData: ", datas);
-
-  let filterKey = event.target.innerText;
-  sortedData = datas.sort((a, b) => b[filterKey] - a[filterKey]);
+  sortedData = datas.sort((a, b) => b[filterKey].localeCompare(a[filterKey]));
+  // sortedData = datas.sort((a, b) => b[filterKey] - a[filterKey]);
   console.log("sortedData:", sortedData);
   generateTableData(sortedData);
+
+  table.classList.add("sorted-by-descending");
 }
 
 renderTable(currentPage);
@@ -155,6 +167,7 @@ function goToNextPage() {
     console.log("currentPage", currentPage);
     document.getElementById("current-page-number").innerText = currentPage;
     // renderTable(currentPage);
+    // headClicked();
     changeStates();
   }
 }
@@ -166,6 +179,7 @@ function goToPreviousPage() {
     page--;
     document.getElementById("current-page-number").innerText = currentPage;
     // renderTable(currentPage);
+    // headClicked();
     changeStates();
   }
 }
