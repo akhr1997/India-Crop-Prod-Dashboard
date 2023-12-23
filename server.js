@@ -2,6 +2,7 @@ const express = require("express");
 const csvtojson = require("csvtojson");
 const fs = require("fs");
 const cors = require("cors");
+const redis = require("redis");
 
 const PORT = process.env.PORT || 3000;
 
@@ -13,7 +14,14 @@ app.use(
   })
 );
 
-const csvFileToParse = "indiaAgricultureCropProduction.csv"; // const csvFileToParse = "testData2.csv";
+const client = redis.createClient({ legacyMode: true });
+client.connect();
+// client.on("connect", () => {
+//   console.log("connected");
+// });
+
+const csvFileToParse = "indiaAgricultureCropProduction.csv";
+// const csvFileToParse = "testData2.csv";
 
 app.get("/api/data", getData);
 
@@ -25,14 +33,28 @@ app.listen(3000, () => {
 
 //Function to parse csv file to JSON.
 function getData(request, response) {
-  csvtojson()
-    .fromFile(csvFileToParse)
-    .then((jsonArray) => {
-      response.json(jsonArray);
-      console.log("JSON ", jsonArray);
-    })
-    .catch((err) => {
-      console.log("Error :", err);
-      response.status(500).json({ error: "Internal Server Error" });
-    });
+  const cacheKey = "data";
+
+  client.get(cacheKey, (error, datas) => {
+    if (error) {
+      console.error(error);
+    }
+
+    if (datas != null) {
+      console.log("Cache Hit!!!");
+      return response.json(JSON.parse(datas));
+    } else {
+      console.log("Cache Miss!!");
+      csvtojson()
+        .fromFile(csvFileToParse)
+        .then((jsonArray) => {
+          response.json(jsonArray);
+          client.SETEX(cacheKey, 3600, JSON.stringify(jsonArray));
+        })
+        .catch((err) => {
+          console.log("Error :", err);
+          response.status(500).json({ error: "Internal Server Error" });
+        });
+    }
+  });
 }

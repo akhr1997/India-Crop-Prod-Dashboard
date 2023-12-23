@@ -9,6 +9,7 @@ BackEnd Rest API:
     Fetch all data from " India Agriculture Crop Production data. csv" ✅
         DATA TOO BIG
         Paginate API Fetch results ✅
+        REDIS: Memory Cache - Not enough ✅
         REDIS: Use in memory DB to load and process data
     Create different Endpoints to fetch data for charting
 
@@ -35,3 +36,4 @@ Extras:
 Bugs:
     Select a state, go to next page, search does not persist ✅
     Select "Select a state", no results! ✅
+    Implement In Memory DB coz cashing is not enough
