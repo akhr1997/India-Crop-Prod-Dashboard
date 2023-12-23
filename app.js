@@ -25,6 +25,8 @@ async function changeStates() {
     await getData();
     console.log("datas in if: ", datas);
     generateTableData(datas);
+    disablePreviousButton(page);
+    disableNextButton(page);
     return;
   }
   await getData();
@@ -33,7 +35,6 @@ async function changeStates() {
   datas = datas.filter((item) => item.State === stateSelect.value);
   console.log("datas after filter: ", datas);
   generateTableData(datas);
-
   disablePreviousButton(page);
   disableNextButton(page);
 }
@@ -47,6 +48,9 @@ async function renderTable() {
   console.log("data in render table function: ");
 
   generateTableData(datas);
+
+  disablePreviousButton(page);
+  disableNextButton(page);
 }
 
 function generateTableData(datas) {

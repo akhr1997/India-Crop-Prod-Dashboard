@@ -10,6 +10,7 @@ BackEnd Rest API:
         DATA TOO BIG
         Paginate API Fetch results ✅
         REDIS: Use in memory DB to load and process data
+    Create different Endpoints to fetch data for charting
 
 FrontEnd:
     Display all csv data in a table ✅
