@@ -13,13 +13,20 @@ app.use(
   })
 );
 
-const csvFilePath = "indiaAgricultureCropProduction.csv";
-// const csvFilePath = "testData2.csv";
+const csvFileToParse = "indiaAgricultureCropProduction.csv"; // const csvFileToParse = "testData2.csv";
+
+app.get("/api/data", getData);
+
+app.listen(3000, () => {
+  console.log(`Application listening to port: ${PORT}`);
+});
+
+//Helper Functions
 
 //Function to parse csv file to JSON.
-app.get("/api/data", (request, response) => {
+function getData(request, response) {
   csvtojson()
-    .fromFile(csvFilePath)
+    .fromFile(csvFileToParse)
     .then((jsonArray) => {
       response.json(jsonArray);
       console.log("JSON ", jsonArray);
@@ -28,8 +35,4 @@ app.get("/api/data", (request, response) => {
       console.log("Error :", err);
       response.status(500).json({ error: "Internal Server Error" });
     });
-});
-
-app.listen(3000, () => {
-  console.log(`Application listening at port: ${PORT}`);
-});
+}
