@@ -37,3 +37,5 @@ Bugs:
     Select a state, go to next page, search does not persist ✅
     Select "Select a state", no results! ✅
     Implement In Memory DB coz cashing is not enough
+    Draw chart changes when go to next and previous page
+    Draw a chart on load for all data

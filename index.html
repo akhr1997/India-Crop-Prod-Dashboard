@@ -10,6 +10,7 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
+
     <title>Crop Dashboard</title>
   </head>
   <body>
@@ -19,37 +20,47 @@
       <select id="state-select">
         <option id="state-options">Select a State</option>
       </select>
-
-      <table class="table tabel-striped">
-        <thead>
-          <tr>
-            <th scope="col" class="table-head" id="year-table-head">State</th>
-            <th scope="col" class="table-head" id="year-table-head">Year</th>
-            <th scope="col" class="table-head" id="crop-table-head">Crop</th>
-            <th scope="col" class="table-head" id="district-table-head">
-              District
-            </th>
-            <th scope="col" class="table-head" id="area-table-head">Area</th>
-            <th scope="col" class="table-head" id="production-table-head">
-              Production
-            </th>
-            <th scope="col" class="table-head" id="yield-table-head">Yield</th>
-          </tr>
-        </thead>
-        <tbody id="data-table"></tbody>
-      </table>
-      <nav class="navigation-buttons" aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item">
-            <button class="page-link mx-2" id="prevButton">Prev</button>
-          </li>
-          <h4 class="page-number" id="current-page-number"></h4>
-          <li class="page-item">
-            <button class="page-link" id="nextButton">Next</button>
-          </li>
-        </ul>
-      </nav>
+      <div class="main-contents">
+        <table class="table tabel-striped table-sm">
+          <thead>
+            <tr>
+              <th scope="col" class="table-head">State</th>
+              <th scope="col" class="table-head" id="year-table-head">Year</th>
+              <th scope="col" class="table-head" id="crop-table-head">Crop</th>
+              <th scope="col" class="table-head" id="district-table-head">
+                District
+              </th>
+              <th scope="col" class="table-head" id="area-table-head">Area</th>
+              <th scope="col" class="table-head" id="production-table-head">
+                Production
+              </th>
+              <th scope="col" class="table-head" id="yield-table-head">
+                Yield
+              </th>
+            </tr>
+          </thead>
+          <tbody id="data-table"></tbody>
+        </table>
+        <nav class="navigation-buttons" aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item">
+              <button class="page-link mx-2" id="prevButton">Prev</button>
+            </li>
+            <h4 class="page-number" id="current-page-number"></h4>
+            <li class="page-item">
+              <button class="page-link" id="nextButton">Next</button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div>
+        <canvas id="myChart-1"></canvas>
+        <canvas id="myChart-2"></canvas>
+      </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script></script>
     <script src="app.js"></script>
   </body>
 </html>
