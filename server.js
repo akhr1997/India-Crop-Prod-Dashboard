@@ -25,25 +25,14 @@ const csvFileToParse = "indiaAgricultureCropProduction.csv";
 
 app.get("/api/data", getData);
 
-app.get("/api/states", getStates);
+app.get("/api/data/");
 
 app.listen(3000, () => {
   console.log(`Application listening to port: ${PORT}`);
 });
 
 //Helper Functions
-
-async function getStates(request, response) {
-  try {
-    const jsonArray = await csvtojson().fromFile(csvFileToParse);
-    const statesColumn = jsonArray.map((entry) => entry.State);
-    response.json(statesColumn);
-  } catch (error) {
-    console.error("Error:", error);
-    response.status(500).json({ error: "Internal Server Error" });
-  }
-}
-
+//Function to parse csv file to JSON.
 function getData(request, response) {
   const cacheKey = "data";
 

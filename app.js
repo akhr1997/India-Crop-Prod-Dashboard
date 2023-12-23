@@ -12,10 +12,8 @@ const Crops = [];
 const Years = [];
 const averageProduction = [];
 let groupedData = new Map();
-// let uniqueStates;
 
 let baseURL = "http://localhost:3000/api/data";
-let baseURLToGetStates = "http://localhost:3000/api/states";
 
 let datas = [];
 let stateArray = [];
@@ -62,7 +60,6 @@ async function renderTable() {
   console.log("Have Access to the huge data object here!!");
 
   console.log("data in render table function: ");
-  createChart1Arrays(datas);
 
   // createChartArrays(datas);
   generateTableData(datas);
@@ -105,14 +102,6 @@ async function getData() {
   datas = dataJSON;
   createOptionElements(datas);
 }
-
-//Fetching data from the RestAPI
-// async function getStates() {
-//   const response = await fetch(baseURLToGetStates);
-//   const statesJSONData = await response.json();
-//   statesDatas = statesJSONData;
-//   createOptionElements(datas);
-// }
 
 //Helper Functions
 function createOptionElements(datas) {
@@ -179,7 +168,7 @@ function sortTable() {
 
 function createChart1Arrays(datas) {
   console.log("in createChart1Arrays: ", datas.length);
-  console.log("in createChart1Arrays: ", datas);
+  console.log("in createChart1Arrays: ", datas.length);
 
   groupedData = datas.reduce((result, obj) => {
     const Crop = obj.Crop;
@@ -299,18 +288,3 @@ function drawChart2() {
   //init or render block
   myChart2 = new Chart(ctx, config);
 }
-
-// async function getStateFromAPI() {
-//   await getStates();
-
-//   uniqueStates = [...new Set(statesDatas)];
-
-//   console.log("statesDatas:", uniqueStates);
-// }
-
-// getStateFromAPI();
-
-/**
- * Year - array
- *
- */
