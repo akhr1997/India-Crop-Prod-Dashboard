@@ -7,6 +7,7 @@ const yearTabelHead = document.getElementById("year-table-head");
 const areaTabelHead = document.getElementById("area-table-head");
 const stateSelect = document.getElementById("state-select");
 const currentPageNumberH2 = document.getElementById("current-page-number");
+const dataHeaders = document.querySelectorAll(".table-head");
 
 //Arrays Calculate average Production for each Crop for Graphing!
 const Crops = [];
@@ -30,7 +31,10 @@ document.getElementById("current-page-number").innerText = currentPage;
 nextBtn.addEventListener("click", goToNextPage, false);
 previousBtn.addEventListener("click", goToPreviousPage, false);
 stateSelect.addEventListener("change", changeStates);
-areaTabelHead.addEventListener("click", areaHeadClicked);
+// areaTabelHead.addEventListener("click", areaHeadClicked);
+dataHeaders.forEach((head) => {
+  head.addEventListener("click", headClicked);
+});
 
 async function changeStates() {
   if (stateSelect.value === "Select a State") {
@@ -92,10 +96,12 @@ function generateTableData(datas) {
   dataTable.innerHTML = data;
 }
 
-function areaHeadClicked() {
-  console.log("clicked");
+function headClicked(event) {
+  console.log("clicked: ", event.target.innerText);
   console.log("unsortedData: ", datas);
-  sortedData = datas.sort((a, b) => b.Area - a.Area);
+
+  let filterKey = event.target.innerText;
+  sortedData = datas.sort((a, b) => b[filterKey] - a[filterKey]);
   console.log("sortedData:", sortedData);
   generateTableData(sortedData);
 }
