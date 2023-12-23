@@ -4,6 +4,7 @@ const nextBtn = document.getElementById("nextButton");
 const previousBtn = document.getElementById("prevButton");
 const areaTableHead = document.getElementById("area-table-head");
 const yearTabelHead = document.getElementById("year-table-head");
+const areaTabelHead = document.getElementById("area-table-head");
 const stateSelect = document.getElementById("state-select");
 const currentPageNumberH2 = document.getElementById("current-page-number");
 
@@ -22,32 +23,32 @@ let currentPage = 1;
 let page = 1;
 let myChart1 = null;
 let myChart2 = null;
+let sortedData = [];
 
 document.getElementById("current-page-number").innerText = currentPage;
 
 nextBtn.addEventListener("click", goToNextPage, false);
 previousBtn.addEventListener("click", goToPreviousPage, false);
 stateSelect.addEventListener("change", changeStates);
-// stateSelect.addEventListener("change", drawChart1);
-yearTabelHead.addEventListener("click", sortTable);
+areaTabelHead.addEventListener("click", areaHeadClicked);
 
 async function changeStates() {
   if (stateSelect.value === "Select a State") {
     await getData();
     console.log("datas object on changing states using dropdown: ", datas);
+
     generateTableData(datas);
     disablePreviousButton(page);
     disableNextButton(page);
-    // createChartArrays(datas);
     return;
   }
+
   await getData();
   console.log("selected value: ", stateSelect.value);
   console.log("datas before filter: ", datas);
   datas = datas.filter((item) => item.State === stateSelect.value);
   console.log("datas after filter: ", datas);
-  createChart1Arrays(datas);
-  createChart2Arrays(datas);
+
   generateTableData(datas);
   disablePreviousButton(page);
   disableNextButton(page);
@@ -61,7 +62,6 @@ async function renderTable() {
 
   console.log("data in render table function: ");
 
-  // createChartArrays(datas);
   generateTableData(datas);
   disablePreviousButton(page);
   disableNextButton(page);
@@ -90,7 +90,14 @@ function generateTableData(datas) {
       ("<tr>");
     });
   dataTable.innerHTML = data;
-  // drawChart1();
+}
+
+function areaHeadClicked() {
+  console.log("clicked");
+  console.log("unsortedData: ", datas);
+  sortedData = datas.sort((a, b) => b.Area - a.Area);
+  console.log("sortedData:", sortedData);
+  generateTableData(sortedData);
 }
 
 renderTable(currentPage);
@@ -161,12 +168,8 @@ function getNumberOfPage() {
   return Math.ceil(datas.length / itemsPerPage);
 }
 
-function sortTable() {
-  const tableRows = document.querySelectorAll("tbody tr");
-  // console.log("Tabel rows: ", tableRows.length);
-}
-
-function createChart1Arrays(datas) {
+async function createChart1Arrays() {
+  await getData();
   console.log("in createChart1Arrays: ", datas.length);
   console.log("in createChart1Arrays: ", datas.length);
 
@@ -201,6 +204,8 @@ function createChart1Arrays(datas) {
   drawChart1();
 }
 
+createChart1Arrays();
+
 function createChart2Arrays(datas) {
   console.log("in createChart2Arrays: ", datas.length);
 
@@ -225,7 +230,7 @@ function createChart2Arrays(datas) {
 
   groupedData.forEach((item) => {
     Years.push(item.Year);
-    averageProduction.push(item.totalProduction / item.count);
+    averageProduction.push((item.totalProduction / item.count) * 3);
   });
 
   console.log("Years:", Years);

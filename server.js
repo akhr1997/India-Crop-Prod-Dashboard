@@ -20,8 +20,8 @@ client.connect();
 //   console.log("connected");
 // });
 
-const csvFileToParse = "indiaAgricultureCropProduction.csv";
-// const csvFileToParse = "testData2.csv";
+// const csvFileToParse = "indiaAgricultureCropProduction.csv";
+const csvFileToParse = "testData2.csv";
 
 app.get("/api/data", getData);
 
