@@ -122,9 +122,11 @@ renderTable(currentPage);
 
 //Fetching data from the RestAPI
 async function getData() {
+  showLoadingSpinner();
   const response = await fetch(baseURL);
   const dataJSON = await response.json();
   datas = dataJSON;
+  hideLoadingSpinner();
   createOptionElements(datas);
 }
 
@@ -312,4 +314,12 @@ function drawChart2() {
   const ctx = document.getElementById("myChart-2").getContext("2d");
   //init or render block
   myChart2 = new Chart(ctx, config);
+}
+
+function showLoadingSpinner() {
+  document.getElementById("loadingSpinner").style.display = "block";
+}
+
+function hideLoadingSpinner() {
+  document.getElementById("loadingSpinner").style.display = "none";
 }

@@ -31,7 +31,9 @@ table {
     justify-content: center;
   }
 
-  .main-contents{
+  .main-contents,
+  .loader,
+  #loader{
     display: flex;
     justify-content: space-between;
     flex-direction: column;
