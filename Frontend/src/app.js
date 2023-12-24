@@ -1,4 +1,4 @@
-import { getNumberOfPage } from "./getPageNumber.js";
+import { getNumberOfPage } from "./Helpers/getPageNumber.js";
 
 //Grabbing HTML Elements
 const dataTable = document.getElementById("data-table");
@@ -10,6 +10,7 @@ const table = document.getElementById("csv-table");
 
 let baseURL = "http://localhost:3000/api/data";
 
+//Initialize global variables
 let datas = [];
 let stateArray = [];
 let itemsPerPage = 15;
@@ -17,8 +18,7 @@ let currentPage = 1;
 let page = 1;
 let sortedData = [];
 
-document.getElementById("current-page-number").innerText = currentPage;
-
+//Event Listeners
 nextBtn.addEventListener("click", goToNextPage, false);
 previousBtn.addEventListener("click", goToPreviousPage, false);
 stateSelect.addEventListener("change", changeStates);
@@ -26,22 +26,18 @@ dataHeaders.forEach((head) => {
   head.addEventListener("click", headClicked);
 });
 
+document.getElementById("current-page-number").innerText = currentPage;
+
+//Helper Functions
 async function changeStates() {
   if (stateSelect.value === "Select a State") {
-    // console.log("datas object on changing states using dropdown: ", datas);
-
     generateTableData(datas);
     disablePreviousButton(page);
     disableNextButton(page);
     return;
   }
-
   await getData();
-  // console.log("selected value: ", stateSelect.value);
-  // console.log("datas before filter: ", datas);
   datas = datas.filter((item) => item.State === stateSelect.value);
-  // console.log("datas after filter: ", datas);
-
   generateTableData(datas);
   disablePreviousButton(page);
   disableNextButton(page);
@@ -51,12 +47,9 @@ async function renderTable() {
   //invoke the fetch function here so it fetches only when we render the table
   await getData();
   console.log("running getData() in render table");
-  // console.log("Have Access to the huge data object here!!");
 
   createProductionChart(datas);
   createYearChart(datas);
-
-  // console.log("data in render table function: ");
 
   generateTableData(datas);
   disablePreviousButton(page);
@@ -93,34 +86,19 @@ function headClicked(event) {
 
   if (table.classList.contains("sorted-by-descending")) {
     sortedData = datas.sort((a, b) => a[filterKey].localeCompare(b[filterKey]));
-    // console.log("sortedData:", sortedData);
     generateTableData(sortedData);
     table.classList.remove("sorted-by-descending");
     return;
-    //    a.name.localeCompare(b.name));
   }
   console.log("clicked: ", event.target.innerText);
-  // console.log("unsortedData: ", datas);
   sortedData = datas.sort((a, b) => b[filterKey].localeCompare(a[filterKey]));
-  // sortedData = datas.sort((a, b) => b[filterKey] - a[filterKey]);
-  // console.log("sortedData:", sortedData);
+
   generateTableData(sortedData);
 
   table.classList.add("sorted-by-descending");
 }
 
 renderTable(currentPage);
-
-//Fetching data from the RestAPI
-// async function getData() {
-//   showLoadingSpinner();
-//   const response = await fetch(baseURL);
-//   const dataJSON = await response.json();
-//   datas = dataJSON;
-//   hideLoadingSpinner();
-//   createOptionElements(datas);
-//   return datas;
-// }
 
 async function getData() {
   try {
@@ -139,21 +117,17 @@ async function getData() {
   } catch (error) {
     console.error("Error fetching data:", error);
     hideLoadingSpinner(); // Ensure loading spinner is hidden in case of an error
-    // Handle the error or propagate it as needed
     throw error;
   }
 }
 
-//Helper Functions
 function createOptionElements(datas) {
   datas.forEach((data) => {
     if (!stateArray.includes(data.State)) {
       stateArray.push(data.State);
-      // console.log("here");
       let newOption = document.createElement("option");
       newOption.text = data.State;
       newOption.value = data.State;
-      // console.log(newOption);
       stateSelect.append(newOption);
     }
   });
@@ -176,26 +150,21 @@ function disablePreviousButton(page) {
 }
 
 function goToNextPage() {
-  // console.log("clicked next");
   if (currentPage * itemsPerPage < datas.length) {
     currentPage++;
     page++;
-    // console.log("currentPage", currentPage);
     document.getElementById("current-page-number").innerText = currentPage;
-    // renderTable(currentPage);
-    // headClicked();
+
     changeStates();
   }
 }
 
 function goToPreviousPage() {
-  // console.log("clicked prev");
   if (currentPage > 1) {
     currentPage--;
     page--;
     document.getElementById("current-page-number").innerText = currentPage;
-    // renderTable(currentPage);
-    // headClicked();
+
     changeStates();
   }
 }
@@ -215,12 +184,7 @@ function createProductionChart(datas) {
     //returns -1 if index is not found/ no element is found.
 
     let productionToAdd;
-
-    // if ((item.Crop = "Coconut")) {
-    //   productionToAdd = parseInt((item.Production * 1.4) / 1000);
-    // } else {
     productionToAdd = parseInt(item.Production, 10);
-    // }
 
     if (!isNaN(productionToAdd) && item.Crop.toLowerCase() !== "coconut") {
       if (existingCropIndex !== -1) {
@@ -300,12 +264,7 @@ function createYearChart(datas) {
     //returns -1 if index is not found/ no element is found.
 
     let productionToAdd;
-
-    // if ((item.Crop = "Coconut")) {
-    //   productionToAdd = parseInt((item.Production * 1.4) / 1000);
-    // } else {
     productionToAdd = parseInt(item.Production, 10);
-    // }
 
     if (!isNaN(productionToAdd) && item.Year.toLowerCase() !== "coconut") {
       if (existingYearIndex !== -1) {

@@ -10,15 +10,32 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
-
     <title>Indian Crop Dashboard</title>
   </head>
   <body>
+    <!-- <div class="header" id="header">
+      <ul>
+        <li class="header-items" id="header-items">Table</li>
+        <li class="header-items" id="header-items">Chart 1</li>
+        <li class="header-items" id="header-items">Chart 2</li>
+      </ul>
+    </div> -->
+
     <div class="container mt-5 mb-5">
-      <h1>India Agriculture Crop Production Dashboard</h1>
-      <select id="state-select">
-        <option id="state-options">Select a State</option>
-      </select>
+      <h1 id="main-heading">India Agriculture Crop Production Dashboard</h1>
+      <div class="d-flex justify-content-center align-items-center flex-column">
+        <!-- Center the state-select element -->
+        <select id="state-select" class="mb-3 text-center">
+          <option id="state-options">Select a State</option>
+        </select>
+        <div
+          class="spinner-border text-primary"
+          role="status"
+          id="loadingSpinner"
+        >
+          <span class="sr-only"></span>
+        </div>
+      </div>
       <div class="main-contents">
         <table
           class="table tabel-striped table-sm table-bordered"
@@ -43,13 +60,6 @@
           </thead>
           <tbody id="data-table"></tbody>
         </table>
-        <div
-          class="spinner-border text-primary"
-          role="status"
-          id="loadingSpinner"
-        >
-          <span class="sr-only"></span>
-        </div>
         <nav class="navigation-buttons" aria-label="Page navigation example">
           <ul class="pagination">
             <li class="page-item">
@@ -62,10 +72,12 @@
           </ul>
         </nav>
       </div>
-      <div>
+      <section id="chart1">
         <canvas id="yearChart" width="400" height="200"></canvas>
+      </section>
+      <section id="chart2">
         <canvas id="productionChart" width="400" height="200"></canvas>
-      </div>
+      </section>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
