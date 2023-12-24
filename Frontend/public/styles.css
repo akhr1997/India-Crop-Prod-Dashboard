@@ -12,11 +12,18 @@ table {
   }
 
   th {
+    /* display: flex; */
+    justify-content: center;
     background-color: #f2f2f2;
+    /* flex-direction: column; */
   }
 
   .table-head{
     cursor: pointer;
+  }
+
+  .table-head:hover{
+    background-color: rgb(245, 243, 242);
   }
 
   .page-number{
@@ -38,3 +45,7 @@ table {
     justify-content: space-between;
     flex-direction: column;
   }
+
+  /* td {
+    text-align: center;
+  } */

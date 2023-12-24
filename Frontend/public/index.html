@@ -11,16 +11,19 @@
       crossorigin="anonymous"
     />
 
-    <title>Crop Dashboard</title>
+    <title>Indian Crop Dashboard</title>
   </head>
   <body>
     <div class="container mt-5 mb-5">
-      <h1>CSV Data Table</h1>
+      <h1>India Agriculture Crop Production Dashboard</h1>
       <select id="state-select">
         <option id="state-options">Select a State</option>
       </select>
       <div class="main-contents">
-        <table class="table tabel-striped table-sm" id="csv-table">
+        <table
+          class="table tabel-striped table-sm table-bordered"
+          id="csv-table"
+        >
           <thead>
             <tr>
               <th scope="col" class="table-head">State</th>
@@ -60,8 +63,8 @@
         </nav>
       </div>
       <div>
-        <canvas id="productionChart" width="400" height="200"></canvas>
         <canvas id="yearChart" width="400" height="200"></canvas>
+        <canvas id="productionChart" width="400" height="200"></canvas>
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -70,6 +73,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
     <script></script>
-    <script src="/Frontend/src/app.js"></script>
+    <script src="/Frontend/src/app.js" type="module"></script>
   </body>
 </html>
