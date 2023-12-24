@@ -238,6 +238,38 @@ function createProductionChart(datas) {
       },
     },
   });
+
+  async function clickHandler2(click) {
+    console.log(click);
+
+    let points = productionChart.getElementsAtEventForMode(
+      click,
+      "nearest",
+      {
+        intersect: true,
+      },
+      true
+    );
+
+    if (points[0]) {
+      const dataset = points[0].datasetIndex;
+      const index = points[0].index;
+      const cropSelected = productionChart.data.labels[index];
+      console.log("Crop is", cropSelected);
+
+      await getData();
+
+      let newDatas = datas.filter((item) => item.Crop === cropSelected);
+
+      generateTableData(newDatas);
+      disablePreviousButton(page);
+      disableNextButton(page);
+
+      await getData();
+    }
+  }
+
+  productionChart.canvas.onclick = clickHandler2;
 }
 
 function createYearChart(datas) {
@@ -312,10 +344,7 @@ function createYearChart(datas) {
 
       await getData();
 
-      // console.log("selected value: ", stateSelect.value);
-      // console.log("datas before filter: ", datas);
       let newDatas = datas.filter((item) => item.Year === yearSelected);
-      // console.log("datas after filter: ", datas);
 
       generateTableData(newDatas);
       disablePreviousButton(page);
