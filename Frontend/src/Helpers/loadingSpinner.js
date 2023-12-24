@@ -1,7 +1,9 @@
-export function showLoadingSpinner() {
+function showLoadingSpinner() {
   document.getElementById("loadingSpinner").style.display = "block";
 }
 
-export function hideLoadingSpinner() {
+function hideLoadingSpinner() {
   document.getElementById("loadingSpinner").style.display = "none";
 }
+
+export { showLoadingSpinner, hideLoadingSpinner };

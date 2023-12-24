@@ -1,4 +1,12 @@
-import { getNumberOfPage } from "./Helpers/getPageNumber.js";
+// import { getNumberOfPage } from "./Helpers/getPageNumber.js";
+import {
+  showLoadingSpinner,
+  hideLoadingSpinner,
+} from "./Helpers/loadingSpinner.js";
+import {
+  disableNextButton,
+  disablePreviousButton,
+} from "./Helpers/enableAndDisableNavButtons.js";
 
 //Grabbing HTML Elements
 const dataTable = document.getElementById("data-table");
@@ -133,28 +141,11 @@ function createOptionElements(datas) {
   });
 }
 
-function disableNextButton(page) {
-  if (page == getNumberOfPage(datas, itemsPerPage)) {
-    nextBtn.disabled = true;
-  } else {
-    nextBtn.disabled = false;
-  }
-}
-
-function disablePreviousButton(page) {
-  if (page == 1) {
-    previousBtn.disabled = true;
-  } else {
-    previousBtn.disabled = false;
-  }
-}
-
 function goToNextPage() {
   if (currentPage * itemsPerPage < datas.length) {
     currentPage++;
     page++;
     document.getElementById("current-page-number").innerText = currentPage;
-
     changeStates();
   }
 }
@@ -164,17 +155,8 @@ function goToPreviousPage() {
     currentPage--;
     page--;
     document.getElementById("current-page-number").innerText = currentPage;
-
     changeStates();
   }
-}
-
-function showLoadingSpinner() {
-  document.getElementById("loadingSpinner").style.display = "block";
-}
-
-function hideLoadingSpinner() {
-  document.getElementById("loadingSpinner").style.display = "none";
 }
 
 function createProductionChart(datas) {
@@ -336,3 +318,5 @@ function createYearChart(datas) {
 
   productionChart.canvas.onclick = clickHandler;
 }
+
+export { getData };
