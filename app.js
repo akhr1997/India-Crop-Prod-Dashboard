@@ -65,6 +65,9 @@ async function renderTable() {
 
   console.log("Have Access to the huge data object here!!");
 
+  createProductionChart(datas);
+  createYearChart(datas);
+
   console.log("data in render table function: ");
 
   generateTableData(datas);
@@ -190,131 +193,131 @@ function getNumberOfPage() {
   return Math.ceil(datas.length / itemsPerPage);
 }
 
-async function createChart1Arrays() {
-  await getData();
-  console.log("in createChart1Arrays: ", datas.length);
-  console.log("in createChart1Arrays: ", datas.length);
+// async function createChart1Arrays() {
+//   await getData();
+//   console.log("in createChart1Arrays: ", datas.length);
+//   console.log("in createChart1Arrays: ", datas.length);
 
-  groupedData = datas.reduce((result, obj) => {
-    const Crop = obj.Crop;
-    const Production = parseInt(obj.Production, 10); // Convert Production to a number
+//   groupedData = datas.reduce((result, obj) => {
+//     const Crop = obj.Crop;
+//     const Production = parseInt(obj.Production, 10); // Convert Production to a number
 
-    if (!isNaN(Production)) {
-      if (result.has(Crop)) {
-        // If Crop exists in the Map, update total Production and count
-        const existingCrop = result.get(Crop);
-        existingCrop.totalProduction += Production;
-        existingCrop.count += 1;
-      } else {
-        // If Crop doesn't exist, add a new entry to the Map
-        result.set(Crop, { Crop, totalProduction: Production, count: 1 });
-      }
-    }
+//     if (!isNaN(Production)) {
+//       if (result.has(Crop)) {
+//         // If Crop exists in the Map, update total Production and count
+//         const existingCrop = result.get(Crop);
+//         existingCrop.totalProduction += Production;
+//         existingCrop.count += 1;
+//       } else {
+//         // If Crop doesn't exist, add a new entry to the Map
+//         result.set(Crop, { Crop, totalProduction: Production, count: 1 });
+//       }
+//     }
 
-    return result;
-  }, new Map());
+//     return result;
+//   }, new Map());
 
-  groupedData.forEach((item) => {
-    Crops.push(item.Crop);
-    averageProduction.push(item.totalProduction / item.count);
-  });
+//   groupedData.forEach((item) => {
+//     Crops.push(item.Crop);
+//     averageProduction.push(item.totalProduction / item.count);
+//   });
 
-  console.log("Crops:", Crops);
-  console.log("Average Production:", averageProduction);
-  // destroy();
+//   console.log("Crops:", Crops);
+//   console.log("Average Production:", averageProduction);
+//   // destroy();
 
-  drawChart1();
-}
+//   // drawChart1();
+// }
 
-createChart1Arrays();
+// createChart1Arrays();
 
-function createChart2Arrays(datas) {
-  console.log("in createChart2Arrays: ", datas.length);
+// function createChart2Arrays(datas) {
+//   console.log("in createChart2Arrays: ", datas.length);
 
-  const groupedData = datas.reduce((result, obj) => {
-    const Year = obj.Year;
-    const Production = parseInt(obj.Production, 10); // Convert Production to a number
+//   const groupedData = datas.reduce((result, obj) => {
+//     const Year = obj.Year;
+//     const Production = parseInt(obj.Production, 10); // Convert Production to a number
 
-    if (!isNaN(Production)) {
-      if (result.has(Year)) {
-        // If Crop exists in the Map, update total Production and count
-        const existingCrop = result.get(Year);
-        existingCrop.totalProduction += Production;
-        existingCrop.count += 1;
-      } else {
-        // If Crop doesn't exist, add a new entry to the Map
-        result.set(Year, { Year, totalProduction: Production, count: 1 });
-      }
-    }
+//     if (!isNaN(Production)) {
+//       if (result.has(Year)) {
+//         // If Crop exists in the Map, update total Production and count
+//         const existingCrop = result.get(Year);
+//         existingCrop.totalProduction += Production;
+//         existingCrop.count += 1;
+//       } else {
+//         // If Crop doesn't exist, add a new entry to the Map
+//         result.set(Year, { Year, totalProduction: Production, count: 1 });
+//       }
+//     }
 
-    return result;
-  }, new Map());
+//     return result;
+//   }, new Map());
 
-  groupedData.forEach((item) => {
-    Years.push(item.Year);
-    averageProduction.push((item.totalProduction / item.count) * 3);
-  });
+//   groupedData.forEach((item) => {
+//     Years.push(item.Year);
+//     averageProduction.push((item.totalProduction / item.count) * 3);
+//   });
 
-  console.log("Years:", Years);
-  console.log("Average Production:", averageProduction);
-  // drawChart2();
-}
+//   console.log("Years:", Years);
+//   console.log("Average Production:", averageProduction);
+//   // drawChart2();
+// }
 
-function drawChart1() {
-  //data block
-  const data = {
-    labels: Crops,
-    datasets: [
-      {
-        label: "Productions in tonnes per crop",
-        data: averageProduction,
-        borderWidth: 1,
-      },
-    ],
-  };
+// function drawChart1() {
+//   //data block
+//   const data = {
+//     labels: Crops,
+//     datasets: [
+//       {
+//         label: "Productions in tonnes per crop",
+//         data: averageProduction,
+//         borderWidth: 1,
+//       },
+//     ],
+//   };
 
-  //config block
-  const config = {
-    type: "bar",
-    data,
-  };
+//   //config block
+//   const config = {
+//     type: "bar",
+//     data,
+//   };
 
-  if (myChart1 != null) {
-    myChart1.destroy();
-  }
+//   if (myChart1 != null) {
+//     myChart1.destroy();
+//   }
 
-  const ctx = document.getElementById("myChart-1").getContext("2d");
-  //init or render block
-  myChart1 = new Chart(ctx, config);
-}
+//   const ctx = document.getElementById("myChart-1").getContext("2d");
+//   //init or render block
+//   myChart1 = new Chart(ctx, config);
+// }
 
-function drawChart2() {
-  //data block
-  const data = {
-    labels: Years,
-    datasets: [
-      {
-        label: "Productions in tonnes per year",
-        data: averageProduction,
-        borderWidth: 1,
-      },
-    ],
-  };
+// function drawChart2() {
+//   //data block
+//   const data = {
+//     labels: Years,
+//     datasets: [
+//       {
+//         label: "Productions in tonnes per year",
+//         data: averageProduction,
+//         borderWidth: 1,
+//       },
+//     ],
+//   };
 
-  //config block
-  const config = {
-    type: "bar",
-    data,
-  };
+//   //config block
+//   const config = {
+//     type: "bar",
+//     data,
+//   };
 
-  if (myChart2 != null) {
-    myChart2.destroy();
-  }
+//   if (myChart2 != null) {
+//     myChart2.destroy();
+//   }
 
-  const ctx = document.getElementById("myChart-2").getContext("2d");
-  //init or render block
-  myChart2 = new Chart(ctx, config);
-}
+//   const ctx = document.getElementById("myChart-2").getContext("2d");
+//   //init or render block
+//   myChart2 = new Chart(ctx, config);
+// }
 
 function showLoadingSpinner() {
   document.getElementById("loadingSpinner").style.display = "block";
@@ -322,4 +325,116 @@ function showLoadingSpinner() {
 
 function hideLoadingSpinner() {
   document.getElementById("loadingSpinner").style.display = "none";
+}
+
+function createProductionChart(datas) {
+  // Extract unique crops and their total production
+  const cropData = datas.reduce(function (acc, item) {
+    const existingCropIndex = acc.findIndex((c) => c.Crop === item.Crop);
+    //returns -1 if index is not found/ no element is found.
+
+    let productionToAdd;
+
+    // if ((item.Crop = "Coconut")) {
+    //   productionToAdd = parseInt((item.Production * 1.4) / 1000);
+    // } else {
+    productionToAdd = parseInt(item.Production, 10);
+    // }
+
+    if (!isNaN(productionToAdd) && item.Crop.toLowerCase() !== "coconut") {
+      if (existingCropIndex !== -1) {
+        acc[existingCropIndex].Production += productionToAdd;
+      } else {
+        acc.push({ Crop: item.Crop, Production: productionToAdd });
+      }
+    }
+
+    return acc;
+  }, []);
+
+  // Now you can use cropData outside the reduce function
+  console.log(cropData);
+
+  // Extract labels and data for the chart
+  const labels = cropData.map((item) => item.Crop);
+  const productionData = cropData.map((item) => item.Production);
+
+  // Create a bar chart
+  const ctx = document.getElementById("productionChart").getContext("2d");
+  const productionChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "Production per Crop",
+          data: productionData,
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+}
+
+function createYearChart(datas) {
+  // Extract unique crops and their total production
+  const yearData = datas.reduce(function (acc, item) {
+    const existingYearIndex = acc.findIndex((c) => c.Year === item.Year);
+    //returns -1 if index is not found/ no element is found.
+
+    let productionToAdd;
+
+    // if ((item.Crop = "Coconut")) {
+    //   productionToAdd = parseInt((item.Production * 1.4) / 1000);
+    // } else {
+    productionToAdd = parseInt(item.Production, 10);
+    // }
+
+    if (!isNaN(productionToAdd) && item.Year.toLowerCase() !== "coconut") {
+      if (existingYearIndex !== -1) {
+        acc[existingYearIndex].Production += productionToAdd;
+      } else {
+        acc.push({ Year: item.Year, Production: productionToAdd });
+      }
+    }
+
+    return acc;
+  }, []);
+
+  // Now you can use cropData outside the reduce function
+  console.log(yearData);
+
+  // Extract labels and data for the chart
+  const yearlabels = yearData.map((item) => item.Year);
+  const productionData = yearData.map((item) => item.Production);
+
+  // Create a bar chart
+  const ctx2 = document.getElementById("yearChart").getContext("2d");
+  const productionChart = new Chart(ctx2, {
+    type: "bar",
+    data: {
+      labels: yearlabels,
+      datasets: [
+        {
+          label: "Production per Year",
+          data: productionData,
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
 }
