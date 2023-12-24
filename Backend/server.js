@@ -3,6 +3,12 @@ const csvtojson = require("csvtojson");
 const fs = require("fs");
 const cors = require("cors");
 const redis = require("redis");
+const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, "../.env") });
+
+// Rest of your code
+
+console.log("from env: ", process.env.API_PORT);
 
 const PORT = process.env.PORT || 3000;
 
@@ -24,8 +30,6 @@ const csvFileToParse = "indiaAgricultureCropProduction.csv";
 // const csvFileToParse = "testData2.csv";
 
 app.get("/api/data", getData);
-
-app.get("/api/data/");
 
 app.listen(3000, () => {
   console.log(`Application listening to port: ${PORT}`);

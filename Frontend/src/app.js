@@ -112,15 +112,36 @@ function headClicked(event) {
 renderTable(currentPage);
 
 //Fetching data from the RestAPI
+// async function getData() {
+//   showLoadingSpinner();
+//   const response = await fetch(baseURL);
+//   const dataJSON = await response.json();
+//   datas = dataJSON;
+//   hideLoadingSpinner();
+//   createOptionElements(datas);
+//   return datas;
+// }
+
 async function getData() {
-  console.log("fetching data!!, In Data()");
-  showLoadingSpinner();
-  const response = await fetch(baseURL);
-  const dataJSON = await response.json();
-  datas = dataJSON;
-  hideLoadingSpinner();
-  createOptionElements(datas);
-  return datas;
+  try {
+    showLoadingSpinner();
+    const response = await fetch(baseURL);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const dataJSON = await response.json();
+    datas = dataJSON;
+    hideLoadingSpinner();
+    createOptionElements(datas);
+    return datas;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    hideLoadingSpinner(); // Ensure loading spinner is hidden in case of an error
+    // Handle the error or propagate it as needed
+    throw error;
+  }
 }
 
 //Helper Functions

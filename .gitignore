@@ -1,4 +1,5 @@
-/node_modules
-/.gitignore
+.env
+node_modules/
 /Backend/node_modules
 /dump.rdb
+dump.rdb
