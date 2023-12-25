@@ -162,54 +162,6 @@ function goToPreviousPage() {
 }
 
 //Chart 1
-function createProductionPerCropChart(datas) {
-  // Extract unique crops and their total production
-  const cropData = datas.reduce(function (acc, item) {
-    const existingCropIndex = acc.findIndex((c) => c.Crop === item.Crop);
-    //returns -1 if index is not found/ no element is found.
-
-    let productionToAdd;
-    productionToAdd = parseInt(item.Production);
-
-    if (!isNaN(productionToAdd) && item.Crop.toLowerCase() !== "coconut") {
-      if (existingCropIndex !== -1) {
-        acc[existingCropIndex].Production += productionToAdd;
-      } else {
-        acc.push({ Crop: item.Crop, Production: productionToAdd });
-      }
-    }
-
-    return acc;
-  }, []);
-
-  // Extract labels and data for the chart
-  const labels = cropData.map((item) => item.Crop);
-  const productionData = cropData.map((item) => item.Production);
-
-  // Create a bar chart
-  const cropChartCtx = document
-    .getElementById("productionChart")
-    .getContext("2d");
-
-  productionPerCropChart = new Chart(cropChartCtx, {
-    type: "bar",
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: "Production per Crop",
-          data: productionData,
-          borderWidth: 1,
-        },
-      ],
-    },
-  });
-
-  productionPerCropChart.canvas.onclick = (event) =>
-    clickHandler(event, productionPerCropChart);
-}
-
-//Chart 2
 function createProductionPerYearChart(datas) {
   // Extract unique crops and their total production
   const yearData = datas.reduce(function (acc, item) {
@@ -254,7 +206,67 @@ function createProductionPerYearChart(datas) {
   productionPerYearChart.canvas.onclick = (event) =>
     clickHandler(event, productionPerYearChart);
 }
+let cropData;
 
+//Chart 2
+function createProductionPerCropChart(datas) {
+  let filterCondition = "Crop";
+  reduceFunction(datas, filterCondition);
+
+  // Extract labels and data for the chart
+  const labels = cropData.map((item) => item.Crop);
+  const productionData = cropData.map((item) => item.Production);
+
+  // Create a bar chart
+  const cropChartCtx = document
+    .getElementById("productionChart")
+    .getContext("2d");
+
+  productionPerCropChart = new Chart(cropChartCtx, {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "Production per Crop",
+          data: productionData,
+          borderWidth: 1,
+        },
+      ],
+    },
+  });
+
+  productionPerCropChart.canvas.onclick = (event) =>
+    clickHandler(event, productionPerCropChart);
+}
+
+//Function to extract unique crops and their total production
+function reduceFunction(datas, filterCondition) {
+  cropData = datas.reduce(function (acc, item) {
+    const existingCropIndex = acc.findIndex(
+      (c) => c[filterCondition] === item[filterCondition]
+    );
+    //returns -1 if index is not found/ no element is found.
+
+    let productionToAdd;
+    productionToAdd = parseInt(item.Production);
+
+    if (
+      !isNaN(productionToAdd) &&
+      item[filterCondition].toLowerCase() !== "coconut"
+    ) {
+      if (existingCropIndex !== -1) {
+        acc[existingCropIndex].Production += productionToAdd;
+      } else {
+        acc.push({ Crop: item[filterCondition], Production: productionToAdd });
+      }
+    }
+
+    return acc;
+  }, []);
+}
+
+//To handle clicks on bar charts
 async function clickHandler(click, chartInstance) {
   console.log(click);
 
