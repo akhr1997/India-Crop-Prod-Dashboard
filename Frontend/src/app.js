@@ -25,6 +25,8 @@ let itemsPerPage = 15;
 let currentPage = 1;
 let page = 1;
 let sortedData = [];
+let productionPerYearChart;
+let productionPerCropChart;
 
 //Event Listeners
 nextBtn.addEventListener("click", goToNextPage, false);
@@ -56,8 +58,8 @@ async function renderTable() {
   await getData();
   console.log("running getData() in render table");
 
-  createProductionChart(datas);
-  createYearChart(datas);
+  createProductionPerCropChart(datas);
+  createProductionPerYearChart(datas);
 
   generateTableData(datas);
   disablePreviousButton(page);
@@ -159,14 +161,15 @@ function goToPreviousPage() {
   }
 }
 
-function createProductionChart(datas) {
+//Chart 1
+function createProductionPerCropChart(datas) {
   // Extract unique crops and their total production
   const cropData = datas.reduce(function (acc, item) {
     const existingCropIndex = acc.findIndex((c) => c.Crop === item.Crop);
     //returns -1 if index is not found/ no element is found.
 
     let productionToAdd;
-    productionToAdd = parseInt(item.Production, 10);
+    productionToAdd = parseInt(item.Production);
 
     if (!isNaN(productionToAdd) && item.Crop.toLowerCase() !== "coconut") {
       if (existingCropIndex !== -1) {
@@ -184,8 +187,11 @@ function createProductionChart(datas) {
   const productionData = cropData.map((item) => item.Production);
 
   // Create a bar chart
-  const ctx = document.getElementById("productionChart").getContext("2d");
-  const productionChart = new Chart(ctx, {
+  const cropChartCtx = document
+    .getElementById("productionChart")
+    .getContext("2d");
+
+  productionPerCropChart = new Chart(cropChartCtx, {
     type: "bar",
     data: {
       labels: labels,
@@ -197,56 +203,21 @@ function createProductionChart(datas) {
         },
       ],
     },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
   });
 
-  async function clickHandler2(click) {
-    console.log(click);
-
-    let points = productionChart.getElementsAtEventForMode(
-      click,
-      "nearest",
-      {
-        intersect: true,
-      },
-      true
-    );
-
-    if (points[0]) {
-      const dataset = points[0].datasetIndex;
-      const index = points[0].index;
-      const cropSelected = productionChart.data.labels[index];
-      console.log("Crop is", cropSelected);
-
-      await getData();
-
-      let newDatas = datas.filter((item) => item.Crop === cropSelected);
-
-      generateTableData(newDatas);
-      disablePreviousButton(page);
-      disableNextButton(page);
-
-      await getData();
-    }
-  }
-
-  productionChart.canvas.onclick = clickHandler2;
+  productionPerCropChart.canvas.onclick = (event) =>
+    clickHandler(event, productionPerCropChart);
 }
 
-function createYearChart(datas) {
+//Chart 2
+function createProductionPerYearChart(datas) {
   // Extract unique crops and their total production
   const yearData = datas.reduce(function (acc, item) {
     const existingYearIndex = acc.findIndex((c) => c.Year === item.Year);
     //returns -1 if index is not found/ no element is found.
 
     let productionToAdd;
-    productionToAdd = parseInt(item.Production, 10);
+    productionToAdd = parseInt(item.Production);
 
     if (!isNaN(productionToAdd) && item.Year.toLowerCase() !== "coconut") {
       if (existingYearIndex !== -1) {
@@ -264,8 +235,9 @@ function createYearChart(datas) {
   const productionData = yearData.map((item) => item.Production);
 
   // Create a bar chart
-  const ctx2 = document.getElementById("yearChart").getContext("2d");
-  const productionChart = new Chart(ctx2, {
+  const yearChartCtx = document.getElementById("yearChart").getContext("2d");
+
+  productionPerYearChart = new Chart(yearChartCtx, {
     type: "bar",
     data: {
       labels: yearlabels,
@@ -277,46 +249,43 @@ function createYearChart(datas) {
         },
       ],
     },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
   });
 
-  async function clickHandler(click) {
-    console.log(click);
+  productionPerYearChart.canvas.onclick = (event) =>
+    clickHandler(event, productionPerYearChart);
+}
 
-    let points = productionChart.getElementsAtEventForMode(
-      click,
-      "nearest",
-      {
-        intersect: true,
-      },
-      true
-    );
+async function clickHandler(click, chartInstance) {
+  console.log(click);
 
-    if (points[0]) {
-      const dataset = points[0].datasetIndex;
-      const index = points[0].index;
-      const yearSelected = productionChart.data.labels[index];
-      console.log(yearSelected);
+  let points = chartInstance.getElementsAtEventForMode(
+    click,
+    "nearest",
+    {
+      intersect: true,
+    },
+    true
+  );
 
-      await getData();
+  if (points[0]) {
+    const dataset = points[0].datasetIndex;
+    const index = points[0].index;
+    const selectedLabel = chartInstance.data.labels[index];
+    console.log(selectedLabel);
 
-      let newDatas = datas.filter((item) => item.Year === yearSelected);
+    await getData();
 
-      generateTableData(newDatas);
-      disablePreviousButton(page);
-      disableNextButton(page);
-
-      await getData();
+    if (chartInstance === productionPerYearChart) {
+      let newYearDatas = datas.filter((item) => item.Year === selectedLabel);
+      generateTableData(newYearDatas);
+    } else {
+      let newCropDatas = datas.filter((item) => item.Crop === selectedLabel);
+      generateTableData(newCropDatas);
     }
-  }
 
-  productionChart.canvas.onclick = clickHandler;
+    disablePreviousButton(page);
+    disableNextButton(page);
+  }
 }
 
 export { getData };
