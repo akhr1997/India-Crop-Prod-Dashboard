@@ -1,4 +1,3 @@
-// import { getNumberOfPage } from "./Helpers/getPageNumber.js";
 import {
   showLoadingSpinner,
   hideLoadingSpinner,
@@ -33,13 +32,14 @@ nextBtn.addEventListener("click", goToNextPage, false);
 previousBtn.addEventListener("click", goToPreviousPage, false);
 stateSelect.addEventListener("change", changeStates);
 dataHeaders.forEach((head) => {
-  head.addEventListener("click", headClicked);
+  head.addEventListener("click", sortTableOnTableHeadClick);
 });
 
 document.getElementById("current-page-number").innerText = currentPage;
 
 //Helper Functions
 async function changeStates() {
+  await getData();
   if (stateSelect.value === "Select a State") {
     generateTableData(datas);
     disablePreviousButton(page);
@@ -91,7 +91,7 @@ function generateTableData(datas) {
   dataTable.innerHTML = data;
 }
 
-function headClicked(event) {
+function sortTableOnTableHeadClick(event) {
   let filterKey = event.target.innerText;
 
   if (table.classList.contains("sorted-by-descending")) {
