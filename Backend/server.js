@@ -1,18 +1,60 @@
-const express = require("express");
-const csvtojson = require("csvtojson");
-const fs = require("fs");
-const cors = require("cors");
-const redis = require("redis");
-const path = require("path");
-require("dotenv").config({ path: path.join(__dirname, "../.env") });
+import axios from "axios";
+import Redis from "ioredis";
+import csvtojson from "csvtojson";
+import express from "express";
+import { promises as fsPromises } from "fs";
+import cors from "cors";
 
-// Rest of your code
+const csvFileToParse = "indiaAgricultureCropProduction.csv";
+// const csvFileToParse = "testData2.csv";
 
-console.log("from env: ", process.env.API_PORT);
+const redisOptions = {
+  host: "localhost",
+  port: 6379,
+};
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3030;
+
+const redisClient = new Redis(redisOptions);
+
+async function parseCSVFile(csvFileToParse) {
+  try {
+    // Read CSV file
+    const csvData = await fsPromises.readFile(csvFileToParse, {
+      encoding: "utf-8",
+    });
+
+    // Convert CSV to JSON
+    const jsonArray = await csvtojson().fromString(csvData);
+
+    return jsonArray;
+  } catch (error) {
+    console.error("Error parsing CSV to JSON:", error);
+    throw error;
+  }
+}
+
+const getProducts = async () => {
+  let cachedProductData = await redisClient.get("redis");
+  if (cachedProductData) {
+    console.log("cache hit");
+
+    return { ...JSON.parse(cachedProductData) };
+  } else {
+    try {
+      const jsonArray = await parseCSVFile(csvFileToParse);
+      redisClient.set("redis", JSON.stringify(jsonArray), "EX", 120);
+      console.log("cache miss");
+      return { ...jsonArray };
+    } catch (error) {
+      console.error("Unable to parse CSV file: ", error);
+      throw error;
+    }
+  }
+};
 
 const app = express();
+const port = 3030;
 
 app.use(
   cors({
@@ -20,46 +62,19 @@ app.use(
   })
 );
 
-const client = redis.createClient({ legacyMode: true });
-client.connect();
-// client.on("connect", () => {
-//   console.log("connected");
-// });
-
-const csvFileToParse = "indiaAgricultureCropProduction.csv";
-// const csvFileToParse = "testData2.csv";
-
-app.get("/api/data", getData);
-
-app.listen(3000, () => {
-  console.log(`Application listening to port: ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
 });
 
-//Helper Functions
-//Function to parse csv file to JSON.
-function getData(request, response) {
-  const cacheKey = "data";
+// Example usage:
+// const beforeTime = new Date().getTime();
+// const afterTime = new Date().getTime();
+// allProducts.responseTime = `${afterTime - beforeTime}ms`;
 
-  client.get(cacheKey, (error, datas) => {
-    if (error) {
-      console.error(error);
-    }
+let allProducts = await getProducts();
 
-    if (datas != null) {
-      console.log("Cache Hit!!!");
-      return response.json(JSON.parse(datas));
-    } else {
-      console.log("Cache Miss!!");
-      csvtojson()
-        .fromFile(csvFileToParse)
-        .then((jsonArray) => {
-          response.json(jsonArray);
-          client.SETEX(cacheKey, 3600, JSON.stringify(jsonArray));
-        })
-        .catch((err) => {
-          console.log("Error :", err);
-          response.status(500).json({ error: "Internal Server Error" });
-        });
-    }
-  });
-}
+app.get("/", (req, res) => {
+  res.send(Object.values(allProducts));
+});
+
+// console.log("All Productssssss: ", allProducts);

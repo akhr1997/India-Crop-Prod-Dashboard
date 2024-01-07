@@ -15,7 +15,8 @@ const stateSelect = document.getElementById("state-select");
 const dataHeaders = document.querySelectorAll(".table-head");
 const table = document.getElementById("csv-table");
 
-let baseURL = "http://localhost:3000/api/data";
+// let baseURL = "http://localhost:3000/api/data";
+let baseURL = "http://localhost:3030/";
 
 //Initialize global variables
 let datas = [];
@@ -46,7 +47,7 @@ async function changeStates() {
     disableNextButton(page);
     return;
   }
-  await getData();
+  // await getData();
   datas = datas.filter((item) => item.State === stateSelect.value);
   generateTableData(datas);
   disablePreviousButton(page);
@@ -121,11 +122,14 @@ async function getData() {
 
     const dataJSON = await response.json();
     datas = dataJSON;
+
     hideLoadingSpinner();
     createOptionElements(datas);
+
     return datas;
   } catch (error) {
     console.error("Error fetching data:", error);
+
     hideLoadingSpinner(); // Ensure loading spinner is hidden in case of an error
     throw error;
   }
