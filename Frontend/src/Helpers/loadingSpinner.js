@@ -1,5 +1,5 @@
 function showLoadingSpinner() {
-  document.getElementById("loadingSpinner").style.display = "block";
+  document.getElementById("loadingSpinner").style.display = "none";
 }
 
 function hideLoadingSpinner() {

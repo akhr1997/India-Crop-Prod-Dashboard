@@ -15,8 +15,7 @@ const stateSelect = document.getElementById("state-select");
 const dataHeaders = document.querySelectorAll(".table-head");
 const table = document.getElementById("csv-table");
 
-// let baseURL = "http://localhost:3000/api/data";
-let baseURL = "http://localhost:3030/";
+let baseURL = "https://localhost:3000/api/data";
 
 //Initialize global variables
 let datas = [];
@@ -47,7 +46,7 @@ async function changeStates() {
     disableNextButton(page);
     return;
   }
-  // await getData();
+  await getData();
   datas = datas.filter((item) => item.State === stateSelect.value);
   generateTableData(datas);
   disablePreviousButton(page);
@@ -120,10 +119,10 @@ async function getData() {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
+    hideLoadingSpinner();
     const dataJSON = await response.json();
     datas = dataJSON;
 
-    hideLoadingSpinner();
     createOptionElements(datas);
 
     return datas;

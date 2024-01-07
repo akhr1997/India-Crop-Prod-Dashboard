@@ -30,46 +30,56 @@
           <span class="sr-only"></span>
         </div>
       </div>
-      <div class="main-contents">
-        <table
-          class="table tabel-striped table-sm table-bordered"
-          id="csv-table"
-        >
-          <thead>
-            <tr>
-              <th scope="col" class="table-head">State</th>
-              <th scope="col" class="table-head" id="year-table-head">Year</th>
-              <th scope="col" class="table-head" id="crop-table-head">Crop</th>
-              <th scope="col" class="table-head" id="district-table-head">
-                District
-              </th>
-              <th scope="col" class="table-head" id="area-table-head">Area</th>
-              <th scope="col" class="table-head" id="production-table-head">
-                Production
-              </th>
-              <th scope="col" class="table-head" id="yield-table-head">
-                Yield
-              </th>
-            </tr>
-          </thead>
-          <tbody id="data-table"></tbody>
-        </table>
-        <nav class="navigation-buttons" aria-label="Page navigation example">
-          <ul class="pagination">
-            <li class="page-item">
-              <button class="page-link mx-2" id="prevButton">Prev</button>
-            </li>
-            <h4 class="page-number" id="current-page-number"></h4>
-            <li class="page-item">
-              <button class="page-link" id="nextButton">Next</button>
-            </li>
-          </ul>
-        </nav>
-      </div>
+      <section id="table-section">
+        <div class="main-contents">
+          <table
+            class="table tabel-striped table-sm table-bordered"
+            id="csv-table"
+          >
+            <thead>
+              <tr>
+                <th scope="col" class="table-head">State</th>
+                <th scope="col" class="table-head" id="year-table-head">
+                  Year
+                </th>
+                <th scope="col" class="table-head" id="crop-table-head">
+                  Crop
+                </th>
+                <th scope="col" class="table-head" id="district-table-head">
+                  District
+                </th>
+                <th scope="col" class="table-head" id="area-table-head">
+                  Area
+                </th>
+                <th scope="col" class="table-head" id="production-table-head">
+                  Production
+                </th>
+                <th scope="col" class="table-head" id="yield-table-head">
+                  Yield
+                </th>
+              </tr>
+            </thead>
+            <tbody id="data-table"></tbody>
+          </table>
+          <nav class="navigation-buttons" aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item">
+                <button class="page-link mx-2" id="prevButton">Prev</button>
+              </li>
+              <h4 class="page-number" id="current-page-number"></h4>
+              <li class="page-item">
+                <button class="page-link" id="nextButton">Next</button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </section>
       <section id="chart1">
+        <h1 id="main-heading">Production chart of crops per year</h1>
         <canvas id="yearChart" width="400" height="200"></canvas>
       </section>
       <section id="chart2">
+        <h1 id="main-heading">Production chart of crops per crop</h1>
         <canvas id="productionChart" width="400" height="200"></canvas>
       </section>
     </div>
